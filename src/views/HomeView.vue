@@ -9,20 +9,17 @@
         <v-btn href="#/join">Join room</v-btn>
       </div>
       <ul class="bg-bubbles">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li v-for="n in 10"></li>
       </ul>
     </div>
   </v-container>
 </template>
+
+<script>
+export default {
+  name: 'HomeView'
+}
+</script>
 
 <style src="../assets/styles/welcome_and_join.css">
 
