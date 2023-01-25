@@ -4,7 +4,7 @@
     <div class="nav-wrapper">
       <div class="bubble-wrapper">
         <ul class="bg-bubbles">
-          <li v-for="n in 10"></li>
+          <li v-for="n in 10" v-bind:key="n"></li>
         </ul>
       </div>
       <a class="brand-logo center">Welcome to <b>SURVEY</b>llance!</a>
@@ -61,4 +61,4 @@ export default {
 <style src="../assets/styles/nav_bubble.css">
 
 </style>
-<style src="../assets/styles/creator_style.css"></style>
+<style src="../assets/styles/creator_style.css" scoped></style>

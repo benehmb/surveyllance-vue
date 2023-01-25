@@ -9,7 +9,7 @@
         <v-btn href="#/join">Join room</v-btn>
       </div>
       <ul class="bg-bubbles">
-        <li v-for="n in 10"></li>
+        <li v-for="n in 10" v-bind:key="n"></li>
       </ul>
     </div>
   </v-container>
@@ -21,6 +21,6 @@ export default {
 }
 </script>
 
-<style src="../assets/styles/welcome_and_join.css">
+<style src="../assets/styles/welcome_and_join.css" scoped>
 
 </style>

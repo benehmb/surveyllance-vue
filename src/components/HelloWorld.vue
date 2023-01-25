@@ -24,6 +24,20 @@
   </v-container>
 </template>
 
-<style src="../assets/styles/welcome_and_join.css">
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+
+@Options({
+  props: {
+    msg: String
+  }
+})
+export default class HelloWorld extends Vue {
+  msg!: string
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style src="../assets/styles/welcome_and_join.css" scoped>
 
 </style>
