@@ -6,7 +6,5 @@ export interface Survey {
   answers: SurveyAnswer[];
   isClosed: boolean;
 
-  OnNewSurveyResult(answer:SurveyAnswer): void;
-
 }
 

@@ -36,19 +36,17 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import SurveyComponent from "../components/Survey.vue"
-import CreateNewSurveyModal from "@/components/CreateNewSurveyModal";
+import CreateNewSurveyModal from "../components/CreateNewSurveyModal.vue";
+import { NewSurvey, surveys } from "@/hubs/creator-hub";
+import { Survey } from "@/objects/Survey";
+
 export default {
-        name: "CreatorView", 
+        name: "CreatorView",
         data() {
             return {
-                surveys: [
-                    { title: "Survey 1", text: ["Text1 Survey 1", "Text2 Survey 1"] },
-                    { title: "Survey 2", text: ["Text1 Survey 2"]},
-                    { title: "Survey 3", text: ["Text1 Survey 3", "Text2 Survey 3", "Text3 Survey 3"]},
-                    { title: "Survey 3", text: ["Text1 Survey 3", "Text2 Survey 3", "Text3 Survey 3"]},
-                ],
+                 surveys,
               showModal: false,
             };
         },
@@ -57,9 +55,17 @@ export default {
             SurveyComponent
         },
   methods:{
-    handleNewSurvey(e){
-      this.surveys.push(e);
-          }
+    handleNewSurvey(e:any){
+      let survey: Survey = {
+        id: "",
+        title: "",
+        answers: [],
+        isClosed: false,
+      };
+      survey.title = e.title;
+      e.text.forEach((text: string) => survey.answers.push({id: "", text: text, votes: 0}));
+      NewSurvey(survey);
+      }
   }
 }
 

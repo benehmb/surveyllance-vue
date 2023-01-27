@@ -1,5 +1,7 @@
 import {Survey} from "@/objects/Survey";
 import {HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
+import {Ref, ref, UnwrapRef} from "vue";
+import survey from "@/components/Survey.vue";
 
 let joinId : string|null;
 
@@ -23,7 +25,7 @@ if (typeof(Storage) !== "undefined") {
 // <editor-fold desc="Websocket-Connection">
 // Connect to Websocket
 const connection = new HubConnectionBuilder()
-    .withUrl("/creator")
+    .withUrl("https://localhost:5001/creator")
     .configureLogging(LogLevel.Information)
     .build();
 
@@ -133,7 +135,7 @@ function CheckRoom(joinId:string){
 // </editor-fold>
 
 const surveyContainer = document.getElementById('surveys');
-const surveys : Survey[] = [];
+export const surveys : Ref<UnwrapRef<Survey[]>> = ref([]);
 
 const questionContainer = document.getElementById('questions');
 
@@ -161,7 +163,7 @@ connection.on("OnNewQuestion", (question) => {
  */
 connection.on("OnNewSurveyResult", (surveyId, answer) => {
     // @ts-ignore
-    surveys.find(survey => survey.id === surveyId).OnNewSurveyResult(answer);
+    surveys.value.find(survey => survey.id === surveyId).OnNewSurveyResult(answer);
 });
 
 /**
@@ -170,7 +172,7 @@ connection.on("OnNewSurveyResult", (surveyId, answer) => {
  * @param {Survey} survey The survey to display
  */
 connection.on("OnNewSurvey", (survey) => {
-    surveys.push(survey);
+    surveys.value.push(survey);
     //TODO: Display survey
 });
 
@@ -212,10 +214,10 @@ function RemoveQuestion(questionId:string) {
  * Create a new survey
  * @param {Survey} survey The survey to create
  */
-async function NewSurvey(survey:Survey){
+export async function NewSurvey(survey:Survey){
     try {
         const generatedSurvey = await connection.invoke("NewSurvey", survey);
-        surveys.push(generatedSurvey);
+        surveys.value.push(generatedSurvey);
     } catch (err) {
         console.error(err);
     }
@@ -240,9 +242,9 @@ function CloseSurvey(surveyId:string) {
  */
 function RemoveSurvey(surveyId:string) {
     try {
-        surveys.forEach(survey => {
+        surveys.value.forEach(survey => {
             if (survey.id === surveyId) {
-                surveys.splice(surveys.indexOf(survey), 1);
+                surveys.value.splice(surveys.value.indexOf(survey), 1);
             }
         });
         connection.invoke("RemoveSurvey", surveyId);

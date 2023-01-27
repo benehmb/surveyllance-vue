@@ -52,7 +52,7 @@ export default {
     createSurvey(){
       let survey = {
         title: document.getElementById("question").value,
-        text: []
+        text: [] //TODO: Change to answers
       };
       for (let i = 1; i <= this.answers; i++) {
         survey.text.push(document.getElementById("answer" + i).value);
