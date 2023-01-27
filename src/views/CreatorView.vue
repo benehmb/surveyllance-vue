@@ -10,12 +10,14 @@
       <a class="brand-logo center">Welcome to <b>SURVEY</b>llance!</a>
     </div>
   </nav>
+  <!-- Popup -->
+  <CreateNewSurveyModal v-show="showModal" @close-modal="showModal = false" @newSurvey="handleNewSurvey($event)"/>
   <!-- Content -->
   <v-container style="margin: inherit; max-width: inherit">
       <v-row no-gutters>
           <v-col>
-              <v-card :elevation="hover ? 16 : 2">
-                  <v-card-title><v-icon>mdi-plus</v-icon> Create new Survey</v-card-title>
+              <v-card @click="showModal = true">
+                  <v-card-title ><v-icon>mdi-plus</v-icon> Create new Survey</v-card-title>
               </v-card>
           </v-col>
       </v-row>
@@ -23,7 +25,7 @@
           <div class="hr-sect">Recent Surveys</div>
       </v-row>
       <div>
-          <SurveyComponent v-for="survey in surveys" 
+          <SurveyComponent v-for="survey in surveys"
                            :key="survey.id" 
                            :surveytitle="survey.title" 
                            :surveytext="survey.text" />
@@ -36,6 +38,7 @@
 
 <script>
 import SurveyComponent from "../components/Survey.vue"
+import CreateNewSurveyModal from "@/components/CreateNewSurveyModal";
 export default {
         name: "CreatorView", 
         data() {
@@ -46,13 +49,17 @@ export default {
                     { title: "Survey 3", text: ["Text1 Survey 3", "Text2 Survey 3", "Text3 Survey 3"]},
                     { title: "Survey 3", text: ["Text1 Survey 3", "Text2 Survey 3", "Text3 Survey 3"]},
                 ],
+              showModal: false,
             };
         },
         components: {
+          CreateNewSurveyModal,
             SurveyComponent
         },
-  mounted() {
-    this.$refs.needHelp.innerHTML = "Me needs help";
+  methods:{
+    handleNewSurvey(e){
+      this.surveys.push(e);
+          }
   }
 }
 
