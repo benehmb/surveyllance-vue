@@ -12,45 +12,45 @@
   </nav>
   <!-- Content -->
   <v-container style="margin: inherit; max-width: inherit">
-    <v-row no-gutters>
-      <v-col>
-      <v-card :elevation="hover ? 16 : 2">
-        <v-card-title><v-icon>mdi-plus</v-icon> Create new Survey</v-card-title>
-      </v-card>
-      </v-col>
-    </v-row>
-    <v-row align="center">
-      <div class="hr-sect">Recent Surveys</div>
-    </v-row>
-    <v-row>
       <v-row no-gutters>
-        <v-col>
-          <v-card :elevation="hover ? 16 : 2">
-            <v-card-title><v-icon color="black">mdi-help-circle</v-icon> What is love?</v-card-title>
-            <!-- Content of the Survey -->
-            <v-card-text>
-              <v-row>
-                <v-col>
-                  Baby don't hurt me
-                </v-col>
-                <v-col>
-                  <v-progress-linear value="15"></v-progress-linear>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
+          <v-col>
+              <v-card :elevation="hover ? 16 : 2">
+                  <v-card-title><v-icon>mdi-plus</v-icon> Create new Survey</v-card-title>
+              </v-card>
+          </v-col>
       </v-row>
-    </v-row>
-    <v-row align="center">
-      <div class="hr-sect">Questions</div>
-    </v-row>
+      <v-row align="center">
+          <div class="hr-sect">Recent Surveys</div>
+      </v-row>
+      <div>
+          <SurveyComponent v-for="survey in surveys" 
+                           :key="survey.id" 
+                           :surveytitle="survey.title" 
+                           :surveytext="survey.text" />
+      </div>
+      <v-row align="center">
+          <div class="hr-sect">Questions</div>
+      </v-row>
   </v-container>
 </template>
 
 <script>
+import SurveyComponent from "../components/Survey.vue"
 export default {
-  name: "CreatorView",
+        name: "CreatorView", 
+        data() {
+            return {
+                surveys: [
+                    { title: "Survey 1", text: ["Text1 Survey 1", "Text2 Survey 1"] },
+                    { title: "Survey 2", text: ["Text1 Survey 2"]},
+                    { title: "Survey 3", text: ["Text1 Survey 3", "Text2 Survey 3", "Text3 Survey 3"]},
+                    { title: "Survey 3", text: ["Text1 Survey 3", "Text2 Survey 3", "Text3 Survey 3"]},
+                ],
+            };
+        },
+        components: {
+            SurveyComponent
+        },
   mounted() {
     this.$refs.needHelp.innerHTML = "Me needs help";
   }
