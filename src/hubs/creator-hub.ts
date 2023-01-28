@@ -2,6 +2,7 @@ import {Survey} from "@/objects/Survey";
 import {HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
 import {Ref, ref, UnwrapRef} from "vue";
 import survey from "@/components/Survey.vue";
+import {Question} from "@/objects/Question";
 
 let joinId : string|null;
 
@@ -134,10 +135,9 @@ function CheckRoom(joinId:string){
 
 // </editor-fold>
 
-const surveyContainer = document.getElementById('surveys');
 export const surveys : Ref<UnwrapRef<Survey[]>> = ref([]);
 
-const questionContainer = document.getElementById('questions');
+export const questions : Ref<UnwrapRef<Question[]>> = ref([]);
 
 //<editor-fold desc="API-Methods">
 
@@ -150,7 +150,7 @@ const questionContainer = document.getElementById('questions');
  * @param {Question} question
  */
 connection.on("OnNewQuestion", (question) => {
-    //TODO: Display question
+    questions.value.push(question);
 });
 
 //</editor-fold>
@@ -163,7 +163,9 @@ connection.on("OnNewQuestion", (question) => {
  */
 connection.on("OnNewSurveyResult", (surveyId, answer) => {
     // @ts-ignore
-    surveys.value.find(survey => survey.id === surveyId).OnNewSurveyResult(answer);
+    surveys.value.find(survey => survey.id === surveyId)
+        .answers.find(surveyAnswer => surveyAnswer.id === answer.id)
+        .votes = answer.votes;
 });
 
 /**
@@ -173,7 +175,6 @@ connection.on("OnNewSurveyResult", (surveyId, answer) => {
  */
 connection.on("OnNewSurvey", (survey) => {
     surveys.value.push(survey);
-    //TODO: Display survey
 });
 
 //</editor-fold>
@@ -200,9 +201,11 @@ connection.on("OnRoomDestroy", () => {
  * Remove a question
  * @param {string} questionId ID of the question to remove
  */
-function RemoveQuestion(questionId:string) {
+export function RemoveQuestion(questionId:string) {
     try {
         connection.invoke("RemoveQuestion", questionId);
+        //Remove question from list
+        questions.value.splice(questions.value.findIndex(question => question.id === questionId), 1);
     } catch (err) {
         console.error(err);
     }
@@ -216,7 +219,7 @@ function RemoveQuestion(questionId:string) {
  */
 export async function NewSurvey(survey:Survey){
     try {
-        const generatedSurvey = await connection.invoke("NewSurvey", survey);
+        const generatedSurvey : Survey = await connection.invoke("NewSurvey", survey);
         surveys.value.push(generatedSurvey);
     } catch (err) {
         console.error(err);
@@ -227,9 +230,12 @@ export async function NewSurvey(survey:Survey){
  * Close a survey, so no more votes can be added
  * @param {string} surveyId ID of the survey to close
  */
-function CloseSurvey(surveyId:string) {
+export function CloseSurvey(surveyId:string) {
     try {
         connection.invoke("CloseSurvey", surveyId);
+        //TODO: Close survey
+        // @ts-ignore
+        surveys.value.find(survey => survey.id === surveyId).isClosed = true;
     } catch (err) {
         console.error(err);
     }
@@ -240,7 +246,7 @@ function CloseSurvey(surveyId:string) {
  * @param {string} surveyId ID of the survey to remove
  * @constructor
  */
-function RemoveSurvey(surveyId:string) {
+export function RemoveSurvey(surveyId:string) {
     try {
         surveys.value.forEach(survey => {
             if (survey.id === surveyId) {

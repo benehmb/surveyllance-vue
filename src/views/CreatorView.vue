@@ -24,35 +24,39 @@
       <v-row align="center">
           <div class="hr-sect">Recent Surveys</div>
       </v-row>
-      <div>
-          <SurveyComponent v-for="survey in surveys"
-                           :key="survey.id" 
-                           :surveytitle="survey.title" 
-                           :surveytext="survey.text" />
+    <div v-for="survey in surveys" :key="survey.id">
+          <SurveyComponent :survey="survey" @close-survey="closeSurvey(survey.id)" @remove-survey="removeSurvey(survey.id)"/>
       </div>
       <v-row align="center">
           <div class="hr-sect">Questions</div>
       </v-row>
+      <div v-for="question in questions" :key="question.id">
+          <QuestionComponent :question="question" @remove-question="removeQuestion(question.id)"/>
+      </div>
   </v-container>
 </template>
 
 <script lang="ts">
 import SurveyComponent from "../components/Survey.vue"
 import CreateNewSurveyModal from "../components/CreateNewSurveyModal.vue";
-import { NewSurvey, surveys } from "@/hubs/creator-hub";
+import QuestionComponent from "../components/Question.vue";
+import {NewSurvey, surveys, questions, RemoveQuestion, CloseSurvey, RemoveSurvey} from "@/hubs/creator-hub";
 import { Survey } from "@/objects/Survey";
+//import { Question } from "@/objects/Question";
 
 export default {
         name: "CreatorView",
         data() {
             return {
                  surveys,
+                questions,
               showModal: false,
             };
         },
         components: {
           CreateNewSurveyModal,
-            SurveyComponent
+          SurveyComponent,
+          QuestionComponent
         },
   methods:{
     handleNewSurvey(e:any){
@@ -63,8 +67,17 @@ export default {
         isClosed: false,
       };
       survey.title = e.title;
-      e.text.forEach((text: string) => survey.answers.push({id: "", text: text, votes: 0}));
+      e.answers.forEach((text: string) => survey.answers.push({id: "", text: text, votes: 0}));
       NewSurvey(survey);
+      },
+      removeQuestion(id: string){
+        RemoveQuestion(id);
+      },
+      closeSurvey(id: string){
+        CloseSurvey(id);
+      },
+      removeSurvey(id: string){
+        RemoveSurvey(id);
       }
   }
 }

@@ -3,39 +3,46 @@
         <v-col>
             <v-card :elevation="hover ? 16 : 2">
                 <v-card-title>
-                    <v-icon>mdi-help-circle</v-icon>
-                    {{title}}
+                  <v-icon>mdi-help-circle</v-icon>
+                  <a :style="'color: ' + (survey.isClosed ? 'black' : 'limegreen')">{{survey.title}}<a v-if="survey.isClosed" style="font-style: italic">(closed)</a></a>
                 </v-card-title>
                 <v-card-text>
-                    <SurveyAnswers v-for="x in text" 
-                    :key="x.id"
-                    :answerText="x"
-                     />
+                  <div v-for="(answer) in survey.answers" :key="answer.id">
+                    <survey-answer-component :surveyAnswer="answer" :percentage="percentage(answer)"/>
+                  </div>
                 </v-card-text>
                 <v-card-action>
-                    <v-btn :flat="true" text>Close Survey</v-btn>
-                    <v-btn :flat="true" text>Remove Survey</v-btn>
+                    <v-btn :flat="true" text @click="$emit('close-survey')">Close Survey</v-btn>
+                    <v-btn :flat="true" color="red" text @click="$emit('remove-survey')">Remove Survey</v-btn>
                 </v-card-action>
             </v-card>
         </v-col>
     </v-row>
 </template>
 
-<script>
-import SurveyAnswers from "../components/SurveyAnswers";
+<script lang="ts">
+import SurveyAnswerComponent from "@/components/SurveyAnswer.vue";
+import { Survey } from "@/objects/Survey";
 export default {
     name: "SurveyComponent",
-    props: ["surveytitle", "surveytext"],
-    data() {
-        return{
-            title: this.surveytitle,
-            text: this.surveytext,
-        };
-    },
     components: {
-        SurveyAnswers
+      SurveyAnswerComponent
     },
-    
+    props: {
+      survey: {
+        type: Object as () => Survey,
+        required: true
+      }
+    },
+  //calculate percentage of votes
+  setup(props: any) {
+    const percentage = (answer: any) => {
+      let totalVotes = 0;
+      props.survey.answers.forEach((answer: any) => totalVotes += answer.votes);
+      return (answer.votes / totalVotes) * 100;
+    };
+    return { percentage };
+  }
 };
 </script>
 

@@ -52,11 +52,17 @@ export default {
     createSurvey(){
       let survey = {
         title: document.getElementById("question").value,
-        text: [] //TODO: Change to answers
+        answers: []
       };
       for (let i = 1; i <= this.answers; i++) {
-        survey.text.push(document.getElementById("answer" + i).value);
+        survey.answers.push(document.getElementById("answer" + i).value);
       }
+      //remove all answers
+      this.answers = 2;
+      for (let i = 1; i <= this.answers; i++) {
+        document.getElementById("answer" + i).value = "";
+      }
+      document.getElementById("question").value = "";
 
       this.$emit('newSurvey', survey);
       this.$emit('close-modal');
