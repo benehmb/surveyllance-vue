@@ -1,0 +1,79 @@
+<template>
+  <v-row>
+    <v-col>
+      <v-card>
+        <v-card-title>
+          <v-icon>mdi-help-circle</v-icon>
+          {{ survey.title }}
+          <a v-if="survey.isClosed" style="font-style: italic">(closed)</a>
+        </v-card-title>
+        <v-card-text v-if="survey.isClosed || isSubmitet">
+          <v-row v-for="answer in survey.answers" :key="answer.id">
+            <v-col></v-col>
+            <v-col>
+              <v-progress-linear :model-value="15" color="blue"></v-progress-linear>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-text v-else>
+          <div v-for="answer in survey.answers" :key="answer.id">
+            <v-radio-group v-model="answerRadio">
+              <v-radio :label="answer.text" :value="answer.id">
+                <ParticipantSurveyVote :surveyAnswer="answer"
+              /></v-radio>
+            </v-radio-group>
+          </div>
+        </v-card-text>
+        <v-card-actions v-if="survey.isClosed || isSubmitet">
+          <v-btn :flat="true" color="red" text @click="$emit('remove-survey')">
+            Remove Survey</v-btn
+          >
+        </v-card-actions>
+        <v-card-actions v-else>
+          <v-btn :flat="true" color="orange" text @click="$emit('submitSurvey')"
+            >Submit Survey</v-btn
+          >
+          <v-btn :flat="true" color="red" text @click="$emit('remove-survey')">
+            Dismiss</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
+</template>
+
+<script lang="ts">
+import ParticipantSurveyVote from "./ParticipantSurveyVote.vue";
+export default {
+  name: "ParticipantSurveyComponent",
+
+  components: {
+    ParticipantSurveyVote,
+  },
+  data() {
+    return {
+      isSubmitet: false,
+      answerRadio: null,
+      survey: {
+        id: 0,
+        title: "Test",
+        isClosed: false,
+        answers: [
+          {
+            id: 0,
+            text: "1",
+          },
+          {
+            id: 1,
+            text: "2",
+          },
+          {
+            id: 2,
+            text: "3",
+          },
+        ],
+      },
+    };
+  },
+};
+</script>
