@@ -1,7 +1,6 @@
 import {Survey} from "@/objects/Survey";
 import {HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
 import {Ref, ref, UnwrapRef} from "vue";
-import survey from "@/components/Survey.vue";
 import {Question} from "@/objects/Question";
 
 let joinId : string|null;
@@ -82,7 +81,7 @@ async function start() {
         console.log("New SURVEYllance-Session with JoinId: " + joinId);
         if (joinId === null)
             throw new Error("JoinId is null");
-        console.log("Go to '" + window.location.origin + "/join/" + encodeURIComponent(joinId) + "' to join it");
+        console.log("Go to '" + window.location.origin + "/#/join/" + encodeURIComponent(joinId) + "' to join it");
     } catch (err) {
         console.log(err);
         setTimeout(start, 5000);
