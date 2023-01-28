@@ -18,22 +18,37 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row align="center">
+      <div class="hr-sect">Active Surveys</div>
+    </v-row>
     <v-row>
-      <ParticipantSurveyComponent />
+      <div v-for="survey in surveysToVote" :key="survey.id">
+        <ParticipantSurveyComponent :survey="survey"/>
+      </div>
+    </v-row>
+    <v-row align="center">
+      <div class="hr-sect">Old Surveys</div>
     </v-row>
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import ParticipantSurveyComponent from "../components/ParticipantSurvey.vue";
+import { surveysToVote, surveys } from "@/hubs/participant-hub";
 export default {
   name: "ParticipantView",
   components: {
     ParticipantSurveyComponent,
+  },
+  data() {
+    return {
+      surveysToVote,
+      surveys,
+    };
   },
 };
 </script>
 
 <style src="../assets/styles/nav_bubble.css"></style>
 
-<style></style>
+<style src="../assets/styles/divider_style.css" scoped></style>

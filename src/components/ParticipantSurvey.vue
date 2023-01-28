@@ -44,35 +44,23 @@
 
 <script lang="ts">
 import ParticipantSurveyVote from "./ParticipantSurveyVote.vue";
+import {Survey} from "@/objects/Survey";
 export default {
   name: "ParticipantSurveyComponent",
 
   components: {
     ParticipantSurveyVote,
   },
+  props: {
+    survey: {
+      type: Object as () => Survey,
+      required: true,
+    },
+  },
   data() {
     return {
       isSubmitet: false,
       answerRadio: null,
-      survey: {
-        id: 0,
-        title: "Test",
-        isClosed: false,
-        answers: [
-          {
-            id: 0,
-            text: "1",
-          },
-          {
-            id: 1,
-            text: "2",
-          },
-          {
-            id: 2,
-            text: "3",
-          },
-        ],
-      },
     };
   },
 };
