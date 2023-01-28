@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import ParticipantSurveyVote from "./ParticipantSurveyVote.vue";
+import ParticipantSurveyVote from "@/components/ParticipantSurveyVote.vue";
 import {Survey} from "@/objects/Survey";
 export default {
   name: "ParticipantSurveyComponent",

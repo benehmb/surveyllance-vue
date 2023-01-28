@@ -56,4 +56,4 @@ export default {
 
 <style src="../assets/styles/nav_bubble.css"></style>
 
-<style></style>
+<style src="../assets/styles/divider_style.css" scoped></style>
