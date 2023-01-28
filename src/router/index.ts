@@ -14,7 +14,15 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/CreatorView.vue')
+    component: () => import('../views/CreatorView.vue')
+  },
+  {
+    path: '/participant',
+    name: 'participant',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import('../views/ParticipantView.vue')
   },
   {
     path: '/join/:id',
@@ -23,7 +31,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: JoinView
-    //component: () => import(/* webpackChunkName: "about" */ '../views/JoinView.vue')
+    //component: () => import('../views/JoinView.vue')
   },
   {
     path: '/join',
@@ -32,7 +40,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: JoinView
-    //component: () => import(/* webpackChunkName: "about" */ '../views/JoinView.vue')
+    //component: () => import('../views/JoinView.vue')
   }
 ]
 
