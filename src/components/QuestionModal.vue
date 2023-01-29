@@ -19,13 +19,12 @@
 </template>
 
 <script>
-import { AskQuestion } from "@/hubs/participant-hub";
 export default {
   name: "QuestionModal",
   methods: {
     askQuestion() {
       let question = document.getElementById("questionInput").value;
-      AskQuestion(question);
+      this.$emit("new-question", question);
       this.$emit("close-modal");
     },
   },

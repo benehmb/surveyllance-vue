@@ -3,6 +3,7 @@ import {Survey} from "@/objects/Survey";
 import {SurveyAnswer} from "@/objects/SurveyAnswer";
 import {ref, Ref, UnwrapRef} from "vue";
 import survey from "@/components/Survey.vue";
+import {Question} from "@/objects/Question";
 
 // <editor-fold desc="Websocket-Connection">
 // Connect to Websocket
@@ -111,11 +112,17 @@ connection.on("OnSurveyClose", (surveyId:string) => {
  */
 connection.on("OnSurveyRemove", (surveyId:string) => {
     //Find and remove survey in both lists, if it exists
-    //FIXME: This is not working
-    // @ts-ignore
-    delete surveysToVote.value[surveysToVote.value.indexOf(surveysToVote.value.find(survey => survey.id === surveyId))];
-    // @ts-ignore
-    delete surveys.value[surveys.value.indexOf(surveys.value.find(survey => survey.id === surveyId))];
+    surveysToVote.value.forEach(survey => {
+        if (survey.id === surveyId) {
+            surveysToVote.value.splice(surveysToVote.value.indexOf(survey), 1);
+        }
+    });
+
+    surveys.value.forEach(survey => {
+        if (survey.id === surveyId) {
+            surveys.value.splice(surveys.value.indexOf(survey), 1);
+        }
+    });
 });
 
 //</editor-fold>
@@ -143,7 +150,7 @@ connection.on("OnRoomDestroy", () => {
  * Ask a question
  * @param {Question} question the question to ask
  */
-export function AskQuestion(question:string) {
+export function AskQuestion(question:Question) {
     try {
         connection.invoke("AskQuestion", question);
     } catch (err) {
@@ -164,8 +171,11 @@ export function AskQuestion(question:string) {
 export async function Vote(surveyId:string, answerId:string) {
     try {
         //Find old survey and remove it
-        // @ts-ignore
-        delete surveysToVote.value[surveysToVote.value.indexOf(surveysToVote.value.find(survey => survey.id === surveyId))];
+        surveysToVote.value.forEach(survey => {
+            if (survey.id === surveyId) {
+                surveysToVote.value.splice(surveysToVote.value.indexOf(survey), 1);
+            }
+        });
 
         //Replace with new one
         const survey = await connection.invoke("Vote", surveyId, answerId);
@@ -185,7 +195,11 @@ export async function Dismiss(surveyId:string) {
     try {
         //Find old survey and remove it
         // @ts-ignore
-        delete surveysToVote.value[surveysToVote.value.indexOf(surveysToVote.value.find(survey => survey.id === surveyId))];
+        surveysToVote.value.forEach(survey => {
+            if (survey.id === surveyId) {
+                surveysToVote.value.splice(surveysToVote.value.indexOf(survey), 1);
+            }
+        });
 
         //Replace with new one
         const survey = await connection.invoke("Dismiss", surveyId);

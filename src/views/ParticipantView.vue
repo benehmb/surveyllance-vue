@@ -10,7 +10,7 @@
     </div>
   </nav>
   <!-- Popup -->
-  <QuestionModal v-show="showQuestionModal" @close-modal="showQuestionModal = false" />
+  <QuestionModal v-show="showQuestionModal" @close-modal="showQuestionModal = false" @new-question="handleNewQuestion($event)"/>
   <!--Container-->
   <v-container style="margin: inherit; max-width: inherit">
     <v-row no-gutters>
@@ -37,7 +37,8 @@
 <script lang="ts">
 import QuestionModal from "../components/QuestionModal.vue";
 import ParticipantSurveyComponent from "../components/ParticipantSurvey.vue";
-import { surveysToVote, surveys } from "@/hubs/participant-hub";
+import { surveysToVote, surveys, AskQuestion } from "@/hubs/participant-hub";
+import {Question} from "@/objects/Question";
 export default {
   name: "ParticipantView",
   components: {
@@ -50,6 +51,15 @@ export default {
       surveysToVote,
       surveys,
     };
+  },
+  methods: {
+    handleNewQuestion(questionTxt: string) {
+      let question: Question = {
+        id: "",
+        title: questionTxt,
+      };
+      AskQuestion(question);
+    },
   },
 };
 </script>
