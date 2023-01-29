@@ -131,7 +131,7 @@ connection.on("OnRoomDestroy", () => {
  * Ask a question
  * @param {Question} question the question to ask
  */
-function AskQuestion(question:string) {
+export function AskQuestion(question:string) {
     try {
         connection.invoke("AskQuestion", question);
     } catch (err) {

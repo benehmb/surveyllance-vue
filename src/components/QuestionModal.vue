@@ -6,12 +6,12 @@
       </v-card-title>
       <v-card-text class="text">
         <v-row>
-          <v-text-field id="question" label="Question" required></v-text-field>
+          <v-text-field id="questionInput" label="Question" required></v-text-field>
         </v-row>
         <v-row> The question you want to ask </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="green" @click="$emit('close-modal')">Ask Question</v-btn>
+        <v-btn color="green" @click="askQuestion()">Ask Question</v-btn>
         <v-btn color="red" @click="$emit('close-modal')">Cancel</v-btn>
       </v-card-actions>
     </v-card>
@@ -19,8 +19,16 @@
 </template>
 
 <script>
+import { AskQuestion } from "@/hubs/participant-hub";
 export default {
   name: "QuestionModal",
+  methods: {
+    askQuestion() {
+      let question = document.getElementById("questionInput").value;
+      AskQuestion(question);
+      this.$emit("close-modal");
+    },
+  },
 };
 </script>
 
