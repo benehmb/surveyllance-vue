@@ -9,6 +9,8 @@
       <a class="brand-logo center">Welcome to <b>SURVEY</b>llance!</a>
     </div>
   </nav>
+  <!-- Popup -->
+  <QuestionModal v-show="showQuestionModal" @close-modal="showQuestionModal = false" />
   <!--Container-->
   <v-container style="margin: inherit; max-width: inherit">
     <v-row no-gutters>
@@ -25,10 +27,17 @@
 </template>
 
 <script>
+import QuestionModal from "../components/QuestionModal.vue";
 import ParticipantSurveyComponent from "../components/ParticipantSurvey.vue";
 export default {
   name: "ParticipantView",
+  data() {
+    return {
+      showQuestionModal: false,
+    };
+  },
   components: {
+    QuestionModal,
     ParticipantSurveyComponent,
   },
 };
