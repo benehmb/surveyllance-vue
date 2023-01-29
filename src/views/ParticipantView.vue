@@ -25,25 +25,30 @@
     </v-row>
     <v-row>
       <div v-for="survey in surveysToVote" :key="survey.id">
-        <ParticipantSurveyComponent :survey="survey"/>
+        <ParticipantSurveyComponent :survey="survey" @vote="vote(survey.id, $event)" @dismiss="dismiss(survey.id)"/>
       </div>
     </v-row>
     <v-row align="center">
       <div class="hr-sect">Old Surveys</div>
     </v-row>
+    <div v-for="survey in surveys" :key="survey.id">
+      <SurveyComponent :survey="survey" :hide-close="true"/>
+    </div>
   </v-container>
 </template>
 
 <script lang="ts">
 import QuestionModal from "../components/QuestionModal.vue";
 import ParticipantSurveyComponent from "../components/ParticipantSurvey.vue";
-import { surveysToVote, surveys, AskQuestion } from "@/hubs/participant-hub";
+import SurveyComponent from "../components/Survey.vue";
+import {surveysToVote, surveys, AskQuestion, Vote, Dismiss} from "@/hubs/participant-hub";
 import {Question} from "@/objects/Question";
 export default {
   name: "ParticipantView",
   components: {
     QuestionModal,
     ParticipantSurveyComponent,
+    SurveyComponent
   },
   data() {
     return {
@@ -60,6 +65,12 @@ export default {
       };
       AskQuestion(question);
     },
+    vote(surveyId: string, answerId : string) {
+      Vote(surveyId, answerId);
+    },
+    dismiss(surveyId: string) {
+      Dismiss(surveyId);
+    }
   },
 };
 </script>

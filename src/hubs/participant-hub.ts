@@ -73,7 +73,9 @@ export const surveys : Ref<UnwrapRef<Survey[]>> = ref([]);
 connection.on("OnNewSurveyResult", (surveyId:string, answer:SurveyAnswer) => {
     if (surveysToVote.value != undefined) {
         // @ts-ignore
-        surveys.value.find(survey => survey.id === surveyId).OnNewSurveyResult(answer);
+        surveys.value.find(survey => survey.id === surveyId)
+            .answers.find(surveyAnswer => surveyAnswer.id === answer.id)
+            .votes = answer.votes;
     }
 
 });
@@ -179,6 +181,7 @@ export async function Vote(surveyId:string, answerId:string) {
 
         //Replace with new one
         const survey = await connection.invoke("Vote", surveyId, answerId);
+        console.log(survey);
         surveys.value.push(survey)
 
     } catch (err) {

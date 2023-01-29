@@ -18,7 +18,7 @@
           </div>
         </v-card-text>
         <v-card-action>
-          <v-btn :flat="true" text @click="$emit('close-survey')">Close Survey</v-btn>
+          <v-btn :flat="true" text @click="$emit('close-survey')" v-if="!hideClose">Close Survey</v-btn>
           <v-btn :flat="true" color="red" text @click="$emit('remove-survey')"
             >Remove Survey</v-btn
           >
@@ -40,6 +40,13 @@ export default {
     survey: {
       type: Object as () => Survey,
       required: true,
+    },
+    hideClose: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false;
+      },
     },
   },
   //calculate percentage of votes

@@ -18,9 +18,8 @@
         <v-card-text v-else>
           <div v-for="answer in survey.answers" :key="answer.id">
             <v-radio-group v-model="answerRadio">
-              <v-radio :label="answer.text" :value="answer.id">
-                <ParticipantSurveyVote :surveyAnswer="answer"
-              /></v-radio>
+              <v-radio :label="answer.text" :value="answer.id" @click="selected = answer.id">
+              </v-radio>
             </v-radio-group>
           </div>
         </v-card-text>
@@ -30,10 +29,10 @@
           >
         </v-card-actions>
         <v-card-actions v-else>
-          <v-btn :flat="true" color="orange" text @click="$emit('submitSurvey')"
+          <v-btn :flat="true" color="orange" text @click="$emit('vote', selected)" :disabled="selected == null"
             >Submit Survey</v-btn
           >
-          <v-btn :flat="true" color="red" text @click="$emit('remove-survey')">
+          <v-btn :flat="true" color="red" text @click="$emit('dismiss')">
             Dismiss</v-btn
           >
         </v-card-actions>
@@ -43,14 +42,9 @@
 </template>
 
 <script lang="ts">
-import ParticipantSurveyVote from "@/components/ParticipantSurveyVote.vue";
 import {Survey} from "@/objects/Survey";
 export default {
   name: "ParticipantSurveyComponent",
-
-  components: {
-    ParticipantSurveyVote,
-  },
   props: {
     survey: {
       type: Object as () => Survey,
@@ -61,6 +55,7 @@ export default {
     return {
       isSubmitet: false,
       answerRadio: null,
+      selected: null,
     };
   },
 };
