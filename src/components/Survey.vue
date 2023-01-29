@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-card :elevation="hover ? 16 : 2">
+      <v-card>
         <v-card-title>
           <v-icon>mdi-help-circle</v-icon>
           <a :style="'color: ' + (survey.isClosed ? 'black' : 'limegreen')"

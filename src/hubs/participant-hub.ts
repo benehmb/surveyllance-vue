@@ -86,8 +86,11 @@ connection.on("OnNewSurveyResult", (surveyId:string, answer:SurveyAnswer) => {
  */
 connection.on("OnNewSurvey", (survey:Survey) => {
     //Add survey to list
-    surveysToVote.value.push(survey);
-    //TODO: Add survey to UI
+    if (survey.isClosed) {
+        surveys.value.push(survey);
+    } else {
+        surveysToVote.value.push(survey);
+    }
 });
 
 /**

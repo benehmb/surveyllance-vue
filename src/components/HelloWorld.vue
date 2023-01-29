@@ -4,9 +4,9 @@
       <!-- Head with _title and create- / join-buttons -->
       <div class="container">
         <h1>Welcome to <b>SURVEY</b>llance!</h1>
-        <v-btn href="#/creator">Create new room</v-btn>
+        <v-btn @click="this.$router.push({name: 'creator'})" style="width: 100%; font-size: 2em;">Create new room</v-btn>
         <h2>OR</h2>
-        <v-btn href="#/join">Join room</v-btn>
+        <v-btn @click="this.$router.push({name: 'join'})" style="width: 100%; font-size: 2em;">Join room</v-btn>
       </div>
       <ul class="bg-bubbles">
         <li></li>

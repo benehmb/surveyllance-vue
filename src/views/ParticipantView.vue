@@ -23,11 +23,9 @@
     <v-row align="center">
       <div class="hr-sect">Active Surveys</div>
     </v-row>
-    <v-row>
       <div v-for="survey in surveysToVote" :key="survey.id">
         <ParticipantSurveyComponent :survey="survey" @vote="vote(survey.id, $event)" @dismiss="dismiss(survey.id)"/>
       </div>
-    </v-row>
     <v-row align="center">
       <div class="hr-sect">Old Surveys</div>
     </v-row>
