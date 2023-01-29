@@ -52,7 +52,7 @@ export default {
         //Set the request method and url
         //TODO: Use code below, when backend is ready
         //roomRequest.open("GET",  window.location.origin + "/rooms/"+this.joinId, true);
-        roomRequest.open("GET",  "https://localhost:5001/rooms/"+joinId, true);
+        roomRequest.open("GET",  "https://surveyllance-backend.azurewebsites.net/rooms/"+joinId, true);
 
         //Handle the response
         roomRequest.onload = () =>{
