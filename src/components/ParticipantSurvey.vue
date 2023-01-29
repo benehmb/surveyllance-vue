@@ -18,7 +18,9 @@
         <v-card-text v-else>
           <div v-for="answer in survey.answers" :key="answer.id">
             <v-radio-group v-model="answerRadio">
-              <v-radio :label="answer.text" :value="answer.id"> </v-radio>
+              <v-radio :label="answer.text" :value="answer.id">
+                <ParticipantSurveyVote :surveyAnswer="answer"
+              /></v-radio>
             </v-radio-group>
           </div>
         </v-card-text>
@@ -41,8 +43,13 @@
 </template>
 
 <script lang="ts">
+import ParticipantSurveyVote from "./ParticipantSurveyVote.vue";
 export default {
   name: "ParticipantSurveyComponent",
+
+  components: {
+    ParticipantSurveyVote,
+  },
   data() {
     return {
       isSubmitet: false,
@@ -54,11 +61,11 @@ export default {
         answers: [
           {
             id: 0,
-            text: "Hallo",
+            text: "1",
           },
           {
             id: 1,
-            text: "du",
+            text: "2",
           },
           {
             id: 2,

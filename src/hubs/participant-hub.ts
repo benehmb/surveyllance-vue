@@ -1,6 +1,8 @@
 import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr'
 import {Survey} from "@/objects/Survey";
 import {SurveyAnswer} from "@/objects/SurveyAnswer";
+import {ref, Ref, UnwrapRef} from "vue";
+import survey from "@/components/Survey.vue";
 
 // <editor-fold desc="Websocket-Connection">
 // Connect to Websocket
@@ -19,7 +21,7 @@ if (typeof(Storage) !== "undefined") {
     }
 
     //Check if type is set to "participant"
-    if (type === false){
+    if (type !== false){
         //TODO: Show error message (Via toast?) "You are not a participant. Close your room and join another or restart your Browser!"
         throw new Error("Not a participant");
     }
@@ -29,7 +31,7 @@ if (typeof(Storage) !== "undefined") {
 }
 
 const connection = new HubConnectionBuilder()
-    .withUrl("/participant")
+    .withUrl("https://localhost:5001/participant")
     .configureLogging(LogLevel.Information)
     .build();
 
@@ -52,8 +54,9 @@ start();
 
 // </editor-fold>
 
-const surveyContainer = document.getElementById('surveys');
-const surveys : Survey[]= [];
+export const surveysToVote : Ref<UnwrapRef<Survey[]>> = ref([]);
+
+export const surveys : Ref<UnwrapRef<Survey[]>> = ref([]);
 
 //<editor-fold desc="API-Methods">
 
@@ -67,9 +70,9 @@ const surveys : Survey[]= [];
  * @param {SurveyAnswer} answer the answer, which has changed
  */
 connection.on("OnNewSurveyResult", (surveyId:string, answer:SurveyAnswer) => {
-    if (surveys != undefined) {
+    if (surveysToVote.value != undefined) {
         // @ts-ignore
-        surveys.find(survey => survey.id === surveyId).OnNewSurveyResult(answer);
+        surveys.value.find(survey => survey.id === surveyId).OnNewSurveyResult(answer);
     }
 
 });
@@ -80,7 +83,7 @@ connection.on("OnNewSurveyResult", (surveyId:string, answer:SurveyAnswer) => {
  */
 connection.on("OnNewSurvey", (survey:Survey) => {
     //Add survey to list
-    surveys.push(survey);
+    surveysToVote.value.push(survey);
     //TODO: Add survey to UI
 });
 
@@ -90,9 +93,16 @@ connection.on("OnNewSurvey", (survey:Survey) => {
  */
 connection.on("OnSurveyClose", (surveyId:string) => {
     //Find and close survey
+    //check if survey is in surveysToVote, if so remove and add to surveys. Else just close survey
     // @ts-ignore
-    surveys.find(survey => survey.id === surveyId).CloseSurvey();
-    //TODO:update UI
+    const survey = surveysToVote.value.find(survey => survey.id === surveyId);
+    if (survey != undefined) {
+        // @ts-ignore
+        delete surveysToVote.value[surveysToVote.value.indexOf(survey)];
+        surveys.value.push(survey);
+    }
+    // @ts-ignore
+    surveys.value.find(survey => survey.id === surveyId).isClosed = true;
 });
 
 /**
@@ -100,10 +110,12 @@ connection.on("OnSurveyClose", (surveyId:string) => {
  * @param {string} surveyId The ID of the survey to delete
  */
 connection.on("OnSurveyRemove", (surveyId:string) => {
-    //Find and remove survey
+    //Find and remove survey in both lists, if it exists
+    //FIXME: This is not working
     // @ts-ignore
-    delete surveys[surveys.indexOf(surveys.find(survey => survey.id === surveyId))];
-    //TODO: Update UI
+    delete surveysToVote.value[surveysToVote.value.indexOf(surveysToVote.value.find(survey => survey.id === surveyId))];
+    // @ts-ignore
+    delete surveys.value[surveys.value.indexOf(surveys.value.find(survey => survey.id === surveyId))];
 });
 
 //</editor-fold>
@@ -149,20 +161,15 @@ export function AskQuestion(question:string) {
  * @param {string} answerId ID of the answer
  * @returns {Survey} The survey with the answers visible
  */
-async function Vote(surveyId:string, answerId:string) {
+export async function Vote(surveyId:string, answerId:string) {
     try {
-        /*
         //Find old survey and remove it
-        const oldSurvey = surveys.find(survey => survey.id === surveyId)
-        oldSurvey.RemoveSurvey();
-        surveys.splice(surveys.indexOf(oldSurvey), 1);
+        // @ts-ignore
+        delete surveysToVote.value[surveysToVote.value.indexOf(surveysToVote.value.find(survey => survey.id === surveyId))];
 
         //Replace with new one
         const survey = await connection.invoke("Vote", surveyId, answerId);
-        const surveyDOMVoted = new SurveyDOMVoted(survey);
-        surveys.push(surveyDOMVoted)
-        surveyContainer.appendChild(surveyDOMVoted.domObject);*/
-        //TODO: No idea what to do here
+        surveys.value.push(survey)
 
     } catch (err) {
         console.error(err);
@@ -174,21 +181,15 @@ async function Vote(surveyId:string, answerId:string) {
  * @param {string} surveyId ID of the survey
  * @returns {Survey} The survey with the answers visible
  */
-async function Dismiss(surveyId:string) {
+export async function Dismiss(surveyId:string) {
     try {
-        /*
         //Find old survey and remove it
-        const oldSurvey = surveys.find(survey => survey.id === surveyId)
-        oldSurvey.RemoveSurvey();
-        surveys.splice(surveys.indexOf(oldSurvey), 1);
+        // @ts-ignore
+        delete surveysToVote.value[surveysToVote.value.indexOf(surveysToVote.value.find(survey => survey.id === surveyId))];
 
         //Replace with new one
         const survey = await connection.invoke("Dismiss", surveyId);
-        const surveyDOMVoted = new SurveyDOMVoted(survey);
-        surveys.push(surveyDOMVoted)
-        surveyContainer.appendChild(surveyDOMVoted.domObject);
-        */
-        //TODO: No idea what to do here
+        surveys.value.push(survey)
 
     } catch (err) {
         console.error(err);

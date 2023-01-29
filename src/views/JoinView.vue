@@ -43,6 +43,7 @@ export default {
     joinRoom() {
       console.log("Joining room with id: " + this.joinId);
       const vueData = this;
+      const joinId = this.joinId;
       //Create promise for the ajax request
       var promise = new Promise((resolve, reject) => {
         //Initialize the ajax request
@@ -51,7 +52,7 @@ export default {
         //Set the request method and url
         //TODO: Use code below, when backend is ready
         //roomRequest.open("GET",  window.location.origin + "/rooms/"+this.joinId, true);
-        roomRequest.open("GET",  "https://localhost:5001/rooms/"+this.joinId, true);
+        roomRequest.open("GET",  "https://localhost:5001/rooms/"+joinId, true);
 
         //Handle the response
         roomRequest.onload = () =>{
@@ -84,8 +85,8 @@ export default {
                 //Setting up the localStorage
                 sessionStorage.clear();
                 sessionStorage.setItem("type", false);
-                sessionStorage.setItem("joinId", this.joinId);
-                window.location.href = "participant.html";
+                sessionStorage.setItem("joinId", joinId);
+                vueData.$router.push({name: 'participant'});
               } else {
                 alert("Sorry, your browser does not support Web Storage...");
               }

@@ -87,4 +87,4 @@ export default {
 <style src="../assets/styles/nav_bubble.css">
 
 </style>
-<style src="../assets/styles/creator_style.css" scoped></style>
+<style src="../assets/styles/divider_style.css" scoped></style>
