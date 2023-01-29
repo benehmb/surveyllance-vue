@@ -32,7 +32,7 @@ if (typeof(Storage) !== "undefined") {
 }
 
 const connection = new HubConnectionBuilder()
-    .withUrl(process.env.API_URL+"/participant")
+    .withUrl("https://surveyllance-backend.azurewebsites.net/participant")
     .configureLogging(LogLevel.Information)
     .build();
 

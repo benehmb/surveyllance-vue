@@ -25,7 +25,7 @@ if (typeof(Storage) !== "undefined") {
 // <editor-fold desc="Websocket-Connection">
 // Connect to Websocket
 const connection = new HubConnectionBuilder()
-    .withUrl(process.env.API_URL + "/creator")
+    .withUrl("https://surveyllance-backend.azurewebsites.net/creator")
     .configureLogging(LogLevel.Information)
     .build();
 
