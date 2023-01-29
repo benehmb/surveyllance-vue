@@ -32,7 +32,7 @@ if (typeof(Storage) !== "undefined") {
 }
 
 const connection = new HubConnectionBuilder()
-    .withUrl("https://localhost:5001/participant")
+    .withUrl(process.env.API_URL+"/participant")
     .configureLogging(LogLevel.Information)
     .build();
 

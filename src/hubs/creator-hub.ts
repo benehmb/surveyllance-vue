@@ -25,7 +25,7 @@ if (typeof(Storage) !== "undefined") {
 // <editor-fold desc="Websocket-Connection">
 // Connect to Websocket
 const connection = new HubConnectionBuilder()
-    .withUrl("https://localhost:5001/creator")
+    .withUrl(process.env.API_URL + "/creator")
     .configureLogging(LogLevel.Information)
     .build();
 
